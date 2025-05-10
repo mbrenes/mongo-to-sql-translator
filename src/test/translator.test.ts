@@ -46,4 +46,59 @@ describe('translateMongoToSQL', () => {
     const sql = translateMongoToSQL('users', 'find', filter, {});
     expect(sql).toBe("SELECT * FROM users WHERE name = 'null'");
   });
+  it('should generate correct SQL for find operation with $or operator', () => {
+    const orQuery = {
+      $or: [
+        { name: 'john' },
+        { age: { $gte: 21 } }
+      ]
+    };
+    const sql = translateMongoToSQL('users', 'find', orQuery, {});
+    expect(sql).toBe("SELECT * FROM users WHERE (name = 'john' OR age >= 21)");
+  });
+  it('should generate correct SQL for find operation with $and operator', () => {
+    const andQuery = {
+      $and: [
+        { name: 'john' },
+        { age: { $lt: 30 } }
+      ]
+    };
+    const sql = translateMongoToSQL('users', 'find', andQuery, {});
+    expect(sql).toBe("SELECT * FROM users WHERE (name = 'john' AND age < 30)");
+  });
+  it('should generate correct SQL for find operation with $in operator', () => {
+    const inQuery = {
+      name: { $in: ['john', 'jane', 'doe'] }
+    };
+    const sql = translateMongoToSQL('users', 'find', inQuery, {});
+    expect(sql).toBe("SELECT * FROM users WHERE name IN ('john', 'jane', 'doe')");
+  });
+  it('should generate correct SQL for find operation with $lt operator', () => {
+    const filter: MongoQuery['filter'] = { age: { $lt: 30 } };
+    const sql = translateMongoToSQL('users', 'find', filter, {});
+    expect(sql).toBe("SELECT * FROM users WHERE age < 30");
+  });
+  it('should generate correct SQL for find operation with $lte operator', () => {
+    const filter: MongoQuery['filter'] = { age: { $lte: 30 } };
+    const sql = translateMongoToSQL('users', 'find', filter, {});
+    expect(sql).toBe("SELECT * FROM users WHERE age <= 30");
+  });
+  // Test case for $gt operator
+  it('should generate correct SQL for find operation with $gt operator', () => {
+    const filter: MongoQuery['filter'] = { age: { $gt: 18 } };
+    const sql = translateMongoToSQL('users', 'find', filter, {});
+    expect(sql).toBe("SELECT * FROM users WHERE age > 18");
+  });
+  // Test case for $gte operator
+  it('should generate correct SQL for find operation with $gte operator', () => {
+    const filter: MongoQuery['filter'] = { age: { $gte: 21 } };
+    const sql = translateMongoToSQL('users', 'find', filter, {});
+    expect(sql).toBe("SELECT * FROM users WHERE age >= 21");
+  });
+  // Test case for $ne operator
+  it('should generate correct SQL for find operation with $ne operator', () => {
+    const filter: MongoQuery['filter'] = { age: { $ne: 30 } };
+    const sql = translateMongoToSQL('users', 'find', filter, {});
+    expect(sql).toBe("SELECT * FROM users WHERE age <> '30'");
+  });
 });

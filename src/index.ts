@@ -7,6 +7,25 @@ db.car.find({ age: { $gte: 21 } }, { name: 1, _id: 1 });
 db.citizen.find({ name: 'john' }, {});
 // Output: SELECT * FROM citizen WHERE name = 'john';
 
+// Example usage with $or operator
+const orQuery = {
+  $or: [
+    { name: 'john' },
+    { age: { $gte: 21 } }
+  ]
+};
+
+db.user.find(orQuery);
+// Expected Output: SELECT * FROM users WHERE (name = 'john' OR age >= 21);
+
+// Example usage with $in operator
+const inQuery = {
+  name: { $in: ['john', 'jane', 'doe'] }
+};
+
+db.user.find(inQuery);
+// Expected Output: SELECT * FROM users WHERE name IN ('john', 'jane', 'doe');
+
 // Example of inserting a document
 try {
   db.user.insertOne({ name: 'Jane Doe', age: 30 });
