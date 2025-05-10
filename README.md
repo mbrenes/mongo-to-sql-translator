@@ -38,7 +38,7 @@ yarn start
 ```
 5. **Example of usage**
 ```bash
- E//xample usage
+ Example usage
 db.user.find({ _id: 23113 }, { name: 1, age: 1 });
 //Output: SELECT name, age FROM user WHERE _id = 23113;
 db.car.find({ age: { $gte: 21 } }, { name: 1, _id: 1 });
