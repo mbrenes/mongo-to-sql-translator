@@ -1,4 +1,5 @@
-import { translateMongoToSQL, MongoQuery } from '../translator';
+import { translateMongoToSQL } from '../translator';
+import { MongoQuery } from '../types/dbtypes';
 
 describe('translateMongoToSQL', () => {
   it('should generate correct SQL for find operation with no filters and projections', () => {
