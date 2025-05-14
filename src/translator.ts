@@ -109,7 +109,13 @@ const translateOperatorCondition = (key: string, operator: string, value: any): 
  */
 const escapeSQL = (value: any): string => {
   if (typeof value === 'string') {
-    return value.replace(/'/g, "''"); // Escape single quotes
+    return value
+    .replace(/'/g, "''") // Escape single quotes
+    .replace(/"/g, '""')     // Escape double quotes
+      .replace(/\\/g, '\\\\')   // Escape backslashes
+      .replace(/\n/g, '\\n')   // Escape newlines
+      .replace(/\r/g, '\\r')   // Escape carriage returns
+      .replace(/\0/g, '\\0');  // Escape null characters
   }
   return value; // Return as is for non-string values
 };
