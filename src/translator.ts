@@ -38,36 +38,18 @@ export const translateMongoToSQL = (
     ? `${sqlQuery} WHERE ${whereClauses.join(' AND ')}`
     : sqlQuery;
 };
+
 /**
- * Translates a MongoDB filter into SQL where clauses.
- * @param filter - The filter object containing MongoDB conditions.
- * @returns An array of SQL where clauses.
+ * Translates a MongoDB insert operation into an SQL insert query string.
+ * @param {string} tableName - The name of the table to insert into.
+ * @param {Record<string, any>} document - The document to insert.
+ * @returns {string} The resulting SQL insert query string.
  */
-/*
-const translateFilter = (filter: Record<string, any>): string[] => {
-  const clauses: string[] = [];
-  for (const [key, value] of Object.entries(filter)) {
-    if (key === '$or') {
-      const orClauses = value.map((subFilter: Record<string, any>) => {
-        return `(${translateFilter(subFilter).join(' AND ')})`;
-      });
-      clauses.push(`(${orClauses.join(' OR ')})`);
-    } else if (key === '$and') {
-      const andClauses = value.map((subFilter: Record<string, any>) => {
-        return `(${translateFilter(subFilter).join(' AND ')})`;
-      });
-      clauses.push(`(${andClauses.join(' AND ')})`);
-    } else if (typeof value === 'object' && value !== null) {
-      // Handle other operators
-      for (const [operator, operatorValue] of Object.entries(value)) {
-        clauses.push(translateOperatorCondition(key, operator, operatorValue));
-      }
-    } else {
-      clauses.push(`${key} = '${escapeSQL(value)}'`);
-    }
-  }
-  return clauses;
-};*/
+export const translateInsertToSQL = (tableName: string, document: Record<string, any>): string => {
+  const columns = Object.keys(document).join(', ');
+  const values = Object.values(document).map(value => escapeSQL(value)).join(', ');
+  return `INSERT INTO ${tableName} (${columns}) VALUES (${values})`;
+};
 
 const translateFilter = (filter: Record<string, any>): string[] => {
   const clauses: string[] = [];

@@ -1,4 +1,4 @@
-import { translateMongoToSQL } from '../translator';
+import { translateMongoToSQL, translateInsertToSQL } from '../translator';
 import { Db } from '../types/dbtypes';
 
 /**
@@ -45,7 +45,17 @@ export const db = new Proxy<Db>({}, {
         }
       },
       findOne: unsupportedOperation('findOne'),
-      insertOne: unsupportedOperation('insertOne'),
+            insertOne: (document: any) => {
+        try {
+          if (!isValidTableName(tableName)) {
+            throw new Error(`Invalid table name "${tableName}".`);
+          }
+          const sqlQuery = translateInsertToSQL(tableName, document);
+          console.log(sqlQuery);
+        } catch (error) {
+          console.error(error instanceof Error ? error.message : "An unknown error occurred.");
+        }
+      },
       insertMany: unsupportedOperation('insertMany'),
       updateOne: unsupportedOperation('updateOne'),
       updateMany: unsupportedOperation('updateMany'),

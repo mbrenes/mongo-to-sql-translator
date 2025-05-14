@@ -29,10 +29,11 @@ db.user.find(inQuery);
 // Example of inserting a document
 try {
   db.user.insertOne({ name: 'Jane Doe', age: 30 });
+  // Expected Output: INSERT INTO user (name, age) VALUES ('Jane Doe', 30);
 } catch (err) {
-     if (err instanceof Error) {
-         console.error(err.message); 
-     }
+  if (err instanceof Error) {
+    console.error(err.message); 
+  }
 }
 //Example of update a document
 try {
